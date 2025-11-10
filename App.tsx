@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getSupabaseClient } from "./utils/supabase/client";
 import { Header } from "./components/header";
 import { Hero } from "./components/hero";
@@ -13,7 +13,7 @@ import { Profile } from "./components/profile";
 import { Toaster } from "sonner";
 
 export default function App() {
-  const DEBUG_RENDER = true; // set to true for debugging
+  const DEBUG_RENDER = false; // set to true for debugging
   const [currentSection, setCurrentSection] = useState("home");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState("");

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { projectId, publicAnonKey } from "../utils/supabase/info";
+import { apiGetItems, apiCreateItem, apiDeleteItem } from "../utils/api";
 import { Plus, Package, MapPin, User, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
@@ -44,15 +44,15 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "Eletrônicos": "bg-blue-100 text-blue-800",
-  "Móveis": "bg-amber-100 text-amber-800",
-  "Roupas": "bg-purple-100 text-purple-800",
-  "Livros": "bg-green-100 text-green-800",
-  "Brinquedos": "bg-pink-100 text-pink-800",
-  "Decoração": "bg-indigo-100 text-indigo-800",
-  "Eletrodomésticos": "bg-red-100 text-red-800",
-  "Materiais de Construção": "bg-gray-100 text-gray-800",
-  "Outros": "bg-slate-100 text-slate-800",
+  "Eletrônicos": "bg-blue-50 text-blue-900",
+  "Móveis": "bg-amber-50 text-amber-900",
+  "Roupas": "bg-violet-50 text-violet-900",
+  "Livros": "bg-emerald-50 text-emerald-900",
+  "Brinquedos": "bg-pink-50 text-pink-900",
+  "Decoração": "bg-indigo-50 text-indigo-900",
+  "Eletrodomésticos": "bg-rose-50 text-rose-900",
+  "Materiais de Construção": "bg-stone-50 text-stone-900",
+  "Outros": "bg-slate-50 text-slate-900",
 };
 
 export function Marketplace({ accessToken, userId, onContactDonor }: MarketplaceProps) {
@@ -75,23 +75,11 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
 
   const fetchItems = async () => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao buscar itens");
-      }
-
-      const data = await response.json();
+      const data = await apiGetItems();
+      // apiGetItems returns { items: [] }
       setItems(data.items || []);
     } catch (error) {
-      console.error("Erro ao buscar itens:", error);
+      console.debug("Erro ao buscar itens:", error);
       toast.error("Erro ao carregar itens de doação");
     } finally {
       setLoading(false);
@@ -109,46 +97,22 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
     setSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("category", category);
-      formData.append("location", location);
-      if (photo) {
-        formData.append("photo", photo);
+      const payload = { title, description, category, location };
+      const resp = await apiCreateItem(payload);
+      if (resp?.ok) {
+        toast.success("Item cadastrado com sucesso!");
+        setIsDialogOpen(false);
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setLocation("");
+        setPhoto(null);
+        fetchItems();
+      } else {
+        throw new Error("Create failed");
       }
-
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao criar item");
-      }
-
-      const data = await response.json();
-      
-      toast.success("Item cadastrado com sucesso!");
-      setIsDialogOpen(false);
-      
-      // Reset form
-      setTitle("");
-      setDescription("");
-      setCategory("");
-      setLocation("");
-      setPhoto(null);
-      
-      // Refresh items
-      fetchItems();
     } catch (error) {
-      console.error("Erro ao criar item:", error);
+      console.debug("Erro ao criar item:", error);
       toast.error("Erro ao cadastrar item");
     } finally {
       setSubmitting(false);
@@ -161,24 +125,15 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
     }
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items/${itemId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao deletar item");
+      const resp = await apiDeleteItem(itemId);
+      if (resp?.ok) {
+        toast.success("Item excluído com sucesso!");
+        fetchItems();
+      } else {
+        throw new Error("Delete failed");
       }
-
-      toast.success("Item excluído com sucesso!");
-      fetchItems();
     } catch (error) {
-      console.error("Erro ao deletar item:", error);
+      console.debug("Erro ao deletar item:", error);
       toast.error("Erro ao excluir item");
     }
   };
@@ -230,7 +185,7 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
                   <div>
                     <Label htmlFor="category">Categoria</Label>
                     <Select value={category} onValueChange={setCategory} required>
-                      <SelectTrigger>
+                      <SelectTrigger id="category">
                         <SelectValue placeholder="Selecione uma categoria" />
                       </SelectTrigger>
                       <SelectContent>
@@ -330,32 +285,39 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
           <div className="text-center py-12">
             <Package className="mx-auto h-12 w-12 text-[var(--color-cerrado-brown)]/30 mb-4" />
             <p className="text-[var(--color-cerrado-brown)]">
-              {selectedCategory === "all" 
-                ? "Nenhum item disponível no momento" 
+              {selectedCategory === "all"
+                ? "Nenhum item disponível no momento"
                 : "Nenhum item nesta categoria"}
             </p>
+            <p className="mt-2 text-sm text-[var(--color-cerrado-brown)]/70">Tente cadastrar um item você mesmo!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredItems.map((item) => (
-              <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                {item.photo_url && (
-                  <div className="aspect-video bg-gray-100 overflow-hidden">
-                    <img
-                      src={item.photo_url}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-xl">{item.title}</CardTitle>
+              <Card key={item.id} className="overflow-hidden hover:shadow-xl transform hover:-translate-y-1 transition">
+                <div className="relative">
+                  {item.photo_url ? (
+                    <div className="aspect-video bg-gray-100 overflow-hidden">
+                      <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-white to-[var(--color-cerrado-cream)] flex items-center justify-center text-[var(--color-cerrado-brown)]">
+                      <Package className="h-10 w-10" />
+                    </div>
+                  )}
+                  <div className="absolute top-3 left-3">
                     <Badge className={CATEGORY_COLORS[item.category] || "bg-gray-100 text-gray-800"}>
                       {item.category}
                     </Badge>
                   </div>
-                  <CardDescription className="line-clamp-2">
+                </div>
+
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-2">
+                    <CardTitle className="text-lg font-semibold">{item.title}</CardTitle>
+                    <span className="text-sm text-[var(--color-cerrado-brown)]/70">{item.created_at}</span>
+                  </div>
+                  <CardDescription className="line-clamp-2 text-sm">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
@@ -367,23 +329,19 @@ export function Marketplace({ accessToken, userId, onContactDonor }: Marketplace
                     </div>
                     <div className="flex items-center text-[var(--color-cerrado-brown)]">
                       <User className="h-4 w-4 mr-2" />
-                      {item.user_name}
+                      {item.user_name || "Anônimo"}
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex gap-2">
                   {item.user_id === userId ? (
-                    <Button
-                      variant="destructive"
-                      className="w-full"
-                      onClick={() => handleDeleteItem(item.id)}
-                    >
+                    <Button variant="destructive" className="w-full" onClick={() => handleDeleteItem(item.id)}>
                       <Trash2 className="h-4 w-4 mr-2" />
                       Excluir
                     </Button>
                   ) : (
                     <Button
-                      className="w-full bg-[var(--color-cerrado-gold)] hover:bg-[var(--color-cerrado-dark-gold)] text-[var(--color-cerrado-dark-brown)]"
+                      className="w-full bg-gradient-to-br from-[var(--color-cerrado-gold)] to-[var(--color-cerrado-dark-gold)] text-[var(--color-cerrado-dark-brown)]"
                       onClick={() => onContactDonor(item.user_id, item.user_name, item.title)}
                     >
                       Entrar em Contato

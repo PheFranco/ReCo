@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul@1.1.2";
+// Import the vaul drawer primitive (do not include version in the specifier)
+import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "./utils";
 

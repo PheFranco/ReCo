@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { projectId, publicAnonKey } from "../utils/supabase/info";
-import { getSupabaseClient } from "../utils/supabase/client";
+import { apiGetProfile, apiUpdateProfile, apiGetMyItems, apiDeleteItem as apiDeleteItemWithToken, apiPatchItem } from "../utils/api";
 import { User, Mail, Package, Edit2, Save, X, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
@@ -41,21 +40,16 @@ export function Profile({ accessToken, userId }: ProfileProps) {
 
   const loadProfile = async () => {
     try {
-      const supabase = getSupabaseClient();
-      const { data, error } = await supabase.auth.getUser(accessToken);
-
-      if (error) throw error;
-
-      if (data?.user) {
-        setProfile({
-          name: data.user.user_metadata?.name || "Usuário",
-          email: data.user.email || "",
-          userType: data.user.user_metadata?.userType || "recebedor",
-        });
-        setEditedName(data.user.user_metadata?.name || "Usuário");
-      }
+      const res = await apiGetProfile(accessToken);
+      const p = res.profile || res;
+      setProfile({
+        name: p.name || "Usuário",
+        email: p.email || "",
+        userType: p.userType || "recebedor",
+      });
+      setEditedName(p.name || "Usuário");
     } catch (error: any) {
-      console.error("Erro ao carregar perfil:", error);
+        console.debug("Erro ao carregar perfil:", error);
       toast.error("Erro ao carregar perfil");
     } finally {
       setLoading(false);
@@ -64,23 +58,10 @@ export function Profile({ accessToken, userId }: ProfileProps) {
 
   const loadMyDonations = async () => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items/my-items`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao carregar doações");
-      }
-
-      const data = await response.json();
-      setMyDonations(data.items || []);
+      const res = await apiGetMyItems(accessToken);
+      setMyDonations(res.items || []);
     } catch (error: any) {
-      console.error("Erro ao carregar minhas doações:", error);
+        console.debug("Erro ao carregar minhas doações:", error);
     }
   };
 
@@ -92,29 +73,12 @@ export function Profile({ accessToken, userId }: ProfileProps) {
 
     setSaving(true);
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/profile`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            name: editedName,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar perfil");
-      }
-
+      await apiUpdateProfile(accessToken, { name: editedName });
       setProfile({ ...profile!, name: editedName });
       setEditMode(false);
       toast.success("Perfil atualizado com sucesso!");
     } catch (error: any) {
-      console.error("Erro ao salvar perfil:", error);
+      console.debug("Erro ao salvar perfil:", error);
       toast.error("Erro ao atualizar perfil");
     } finally {
       setSaving(false);
@@ -127,56 +91,24 @@ export function Profile({ accessToken, userId }: ProfileProps) {
     }
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items/${itemId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao excluir item");
-      }
-
+      await apiDeleteItemWithToken(itemId, accessToken);
       setMyDonations(myDonations.filter((item) => item.id !== itemId));
       toast.success("Item excluído com sucesso!");
     } catch (error: any) {
-      console.error("Erro ao excluir item:", error);
+      console.debug("Erro ao excluir item:", error);
       toast.error("Erro ao excluir item");
     }
   };
 
   const handleMarkAsDonated = async (itemId: string) => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-f0497d83/donation-items/${itemId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            status: "doado",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar status");
-      }
-
+      await apiPatchItem(itemId, accessToken, { status: 'doado' });
       setMyDonations(
-        myDonations.map((item) =>
-          item.id === itemId ? { ...item, status: "doado" } : item
-        )
+        myDonations.map((item) => (item.id === itemId ? { ...item, status: "doado" } : item))
       );
       toast.success("Item marcado como doado!");
     } catch (error: any) {
-      console.error("Erro ao atualizar status:", error);
+      console.debug("Erro ao atualizar status:", error);
       toast.error("Erro ao atualizar status");
     }
   };
