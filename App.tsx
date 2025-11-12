@@ -6,6 +6,8 @@ import { About } from "./components/about";
 import { Features } from "./components/features";
 import { Contact } from "./components/contato";
 import { Auth } from "./components/auth";
+import { Register } from "./components/register";
+import { ForgotPassword } from "./components/forgotPassword";
 import { Chat } from "./components/chat";
 import { MapView } from "./components/mapview";
 import { Marketplace } from "./components/marketplace";
@@ -18,6 +20,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState("");
   const [userId, setUserId] = useState("");
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [chatInitialMessage, setChatInitialMessage] = useState("");
 
   useEffect(() => {
@@ -32,14 +35,36 @@ export default function App() {
       setAccessToken(data.session.access_token);
       setUserId(data.session.user.id);
       setIsLoggedIn(true);
+      // try to load role from localStorage if present
+      const storedRole = localStorage.getItem('reco_role');
+      if (storedRole) setUserRole(storedRole);
+      return;
+    }
+
+    // fallback: check localStorage (simple dev/session persistence)
+    const token = localStorage.getItem('reco_token');
+    const id = localStorage.getItem('reco_userId');
+    const role = localStorage.getItem('reco_role');
+    if (token && id) {
+      setAccessToken(token);
+      setUserId(id);
+      setUserRole(role);
+      setIsLoggedIn(true);
     }
   };
 
-  const handleLoginSuccess = (token: string, id: string) => {
+  const handleLoginSuccess = (token: string, id: string, role?: string) => {
     setAccessToken(token);
     setUserId(id);
     setIsLoggedIn(true);
-    setCurrentSection("home");
+    if (role) {
+      setUserRole(role);
+      localStorage.setItem('reco_role', role);
+    }
+    // persist simple session for dev
+    try { localStorage.setItem('reco_token', token); localStorage.setItem('reco_userId', id); } catch (e) {}
+    // Após login, ir direto para o perfil do usuário
+    setCurrentSection("profile");
   };
 
   const handleLogout = async () => {
@@ -48,6 +73,8 @@ export default function App() {
     setIsLoggedIn(false);
     setAccessToken("");
     setUserId("");
+    setUserRole(null);
+    try { localStorage.removeItem('reco_token'); localStorage.removeItem('reco_userId'); localStorage.removeItem('reco_role'); } catch(e){}
     setCurrentSection("home");
   };
 
@@ -128,7 +155,15 @@ export default function App() {
       )}
       
       {currentSection === "login" && (
-        <Auth onLoginSuccess={handleLoginSuccess} />
+        <Auth onLoginSuccess={handleLoginSuccess} onNavigate={handleNavigate} />
+      )}
+
+      {currentSection === "register" && (
+        <Register onRegisterSuccess={handleLoginSuccess} />
+      )}
+
+      {currentSection === "forgot" && (
+        <ForgotPassword />
       )}
       
       {currentSection === "marketplace" && isLoggedIn && (

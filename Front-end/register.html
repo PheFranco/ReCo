@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastrar — ReCo</title>
+  <link rel="stylesheet" href="style/global.css" />
+  <style>
+    .center-card{ max-width:520px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
+    .form-row{ margin-bottom:12px }
+    .btn{ display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer }
+    .btn-primary{ background:var(--color-cerrado-green); color:#fff; border:none }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="center-card card-elevated">
+      <h1 style="margin-top:0">Criar conta</h1>
+      <p style="color:#6b4a3a">Preencha seus dados para criar uma conta</p>
+
+      <form id="registerForm" action="profile.html" method="get">
+        <div class="form-row">
+          <label for="name">Nome completo</label>
+          <input id="name" name="name" type="text" placeholder="Seu nome" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" required />
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="seu@exemplo.com" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" required />
+        </div>
+        <div class="form-row">
+          <label for="password">Senha</label>
+          <input id="password" name="password" type="password" placeholder="Crie uma senha" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" required />
+        </div>
+
+        <div class="form-row">
+          <label>Tipo de perfil</label>
+          <div>
+            <label><input type="radio" name="role" value="doador" checked /> Doador</label>
+            <label style="margin-left:12px"><input type="radio" name="role" value="recebedor" /> Recebedor</label>
+          </div>
+        </div>
+
+        <div id="doadorFields" class="form-row">
+          <label>Sou (doador):</label>
+          <div>
+            <label><input type="radio" name="doador_type" value="pf" checked /> Pessoa física</label>
+            <label style="margin-left:12px"><input type="radio" name="doador_type" value="ong" /> ONG / Empresa</label>
+          </div>
+          <div id="razaoWrap" style="margin-top:8px;display:none">
+            <label for="razao">Razão social (ONG/Empresa)</label>
+            <input id="razao" name="razao" type="text" placeholder="Razão social" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" />
+          </div>
+        </div>
+
+        <div id="recebedorFields" class="form-row" style="display:none">
+          <label>Tipo de recebedor</label>
+          <select name="recebedor_subtype" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px">
+            <option value="ong">ONG</option>
+            <option value="artista">Artista</option>
+            <option value="conserto_pc">Consertador de PC</option>
+            <option value="outro">Pessoa física</option>
+          </select>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:12px">
+          <button class="btn btn-primary" type="submit">Criar conta</button>
+        </div>
+      </form>
+
+      <script>
+        (function(){
+          const roleRadios = document.querySelectorAll('input[name=role]');
+          const doadorFields = document.getElementById('doadorFields');
+          const recebedorFields = document.getElementById('recebedorFields');
+          const doadorTypeRadios = document.querySelectorAll('input[name=doador_type]');
+          const razaoWrap = document.getElementById('razaoWrap');
+
+          function updateVisibility(){
+            const role = document.querySelector('input[name=role]:checked').value;
+            if(role === 'doador'){
+              doadorFields.style.display = '';
+              recebedorFields.style.display = 'none';
+            } else {
+              doadorFields.style.display = 'none';
+              recebedorFields.style.display = '';
+            }
+          }
+
+          function updateRazao(){
+            const t = document.querySelector('input[name=doador_type]:checked').value;
+            razaoWrap.style.display = t === 'ong' ? '' : 'none';
+          }
+
+          roleRadios.forEach(r=>r.addEventListener('change', updateVisibility));
+          doadorTypeRadios.forEach(r=>r.addEventListener('change', updateRazao));
+          updateVisibility(); updateRazao();
+
+          // intercept submit to create a demo session and forward to profile with params
+          const form = document.getElementById('registerForm');
+          form.addEventListener('submit', function(e){
+            e.preventDefault();
+            const fd = new FormData(form);
+            const params = new URLSearchParams();
+            for(const [k,v] of fd.entries()) params.append(k, v);
+            // set simple demo session
+            const email = fd.get('email');
+            const role = fd.get('role') || 'recebedor';
+            localStorage.setItem('reco_token','dev-token');
+            localStorage.setItem('reco_userId', String(email || 'user-dev'));
+            localStorage.setItem('reco_role', String(role));
+            window.location.href = 'profile.html?' + params.toString();
+          });
+        })();
+      </script>
+
+      <p style="margin-top:12px">Já tem conta? <a href="login.html">Entrar</a></p>
+    </div>
+  </main>
+
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+  <script src="/Front-end/js/header.js"></script>
+</body>
+</html>

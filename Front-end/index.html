@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReCo — Reutiliza & Conecta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/global.css">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <span class="brand">ReCo — TR3VOS</span>
+        <ul>
+          <li><a href="/">Sobre</a></li>
+          <li><a href="/about">Números</a></li>
+          <li><a href="/contact">Contato</a></li>
+        </ul>
+        <div class="dropdown">
+  <button class="dropbtn">Acesse</button>
+  <div class="dropdown-content">
+    <a href="login.html">Login</a>
+    <a href="Itens">Marketingplace</a>
+  </div>
+</div>
+      </nav>
+    </header>
+    <main>
+      <!-- Hero -->
+  <section id="hero" class="hero">
+        <div class="hero-inner container">
+            <div class="hero-right">
+              <!-- árvore posicionada sobre o conteúdo direito -->
+                <div class="hero-illustration tree-overlay ipe-wrapper animate-sun">
+                  <img id="hero-tree" src="style/assets/arvore.png" alt="árvore" class="ipe-arvore">
+                </div>
+            <h1 class="hero-title"><span class="accent">Re</span>utiliza <span class="amp">&</span> <span class="accent green">Co</span>necta</h1>
+            <p class="hero-sub">Conexão que transforma descarte em oportunidade.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Intro / two-column section -->
+      <section class="two-col container">
+        <div class="col text">
+          <h2>Talvez lixo?</h2>
+          <p>Só esse ano cerca de 450 toneladas de lixo eletrônico foi descartado nos pontos de entrega voluntária, porém esse número pode ser bem maior tendo em vista se uma grande parte da população do DF não tiver conhecimento sobre tais pontos.</p>
+        </div>
+        <div class="col media">
+          <div class="card card-elevated card-media">
+            <img src="style/assets/bin.svg" alt="lixo eletrônico" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </section>
+
+      <!-- Work / two column -->
+      <section class="work container">
+        <h2 class="work-title">Nosso <em>Trabalho</em></h2>
+        <div class="work-grid">
+          <div>
+            <h3>Qual a ideia do projeto ?</h3>
+            <p>Conectar quem precisa doar ou descartar aparelhos e peças eletrônicas, para quem possa receber e fazer um uso devido, como: ONG's que precisam de computador para pessoas carentes ou artistas que reutilizam peças para gerar arte.</p>
+          </div>
+          <div>
+            <p>Poderia ser profissionais que fazem manutenção e concerto e podem tirar partes ainda funcionais e reutilizáveis.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Números / estatísticas -->
+      <section id="numbers" class="numbers container">
+        <div class="numbers-grid">
+          <div class="stat">
+            <div class="stat-value">450t</div>
+            <div class="stat-label">Lixo eletrônico coletado</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">120</div>
+            <div class="stat-label">Pontos de entrega</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">85</div>
+            <div class="stat-label">ONGs conectadas</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contato -->
+      <section id="contact" class="contact container">
+        <h2>Contato</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <p>Tem uma dúvida ou quer colaborar? Fale conosco:</p>
+            <p><strong>Email:</strong> contato@reco.org</p>
+            <p><strong>Telefone:</strong> (61) 99999-9999</p>
+            <p><strong>Endereço:</strong> Brasília - DF</p>
+          </div>
+          <div class="contact-form">
+            <form id="contactForm" onsubmit="event.preventDefault(); alert('Mensagem enviada (demo)'); this.reset();">
+              <label for="name">Nome</label>
+              <input id="name" name="name" required />
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required />
+              <label for="message">Mensagem</label>
+              <textarea id="message" name="message" rows="4" required></textarea>
+              <button class="btn" type="submit">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer>
+    </footer>
+  <script src="js/header.js"></script>
+  <script src="js/tree-variant.js"></script>
+    <script type="module" src="../main.tsx"></script>
+  </body>
+</html>

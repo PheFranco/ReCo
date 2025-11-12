@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perfil — ReCo</title>
+  <link rel="stylesheet" href="style/global.css" />
+  <style>
+    .profile-card{ max-width:680px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
+    .avatar{ width:96px; height:96px; border-radius:9999px; background:#f3f3f3 }
+    .meta{ display:flex; gap:16px; align-items:center }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div id="profileContent"></div>
+    <script>
+      (function(){
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || 'Nome do Usuário';
+        const email = params.get('email') || 'usuario@exemplo.com';
+        const role = params.get('role') || 'doador';
+        const doador_type = params.get('doador_type') || 'pf';
+        const recebedor_subtype = params.get('recebedor_subtype') || '';
+        const razao = params.get('razao') || '';
+
+        const root = document.getElementById('profileContent');
+        let html = '';
+        html += `<div class="meta"><div class="avatar"></div><div><h2>${escapeHtml(name)}</h2><p style="color:#6b4a3a">${escapeHtml(email)}</p></div></div>`;
+
+        if(role === 'doador'){
+          html += `<section style="margin-top:20px"><h3>Visão do doador</h3>`;
+          if(doador_type === 'ong'){
+            html += `<p><strong>Razão social:</strong> ${escapeHtml(razao || '—')}</p>`;
+          }
+          html += `<p><a href="chat.html">Chats (conversas sobre doações)</a></p>`;
+          html += `</section>`;
+        } else {
+          html += `<section style="margin-top:20px"><h3>Visão do recebedor</h3>`;
+          html += `<p><strong>Tipo:</strong> ${escapeHtml(recebedor_subtype || 'Pessoa')}</p>`;
+          html += `</section>`;
+        }
+
+  html += `<section style="margin-top:12px"><h3>Configurações</h3><ul><li><a href="#">Alterar senha</a></li><li><a href="#">Editar perfil</a></li><li><a href="login.html">Sair</a></li></ul></section>`;
+
+        root.innerHTML = html;
+
+        function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      })();
+    </script>
+  </main>
+
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+  <script src="/Front-end/js/header.js"></script>
+</body>
+</html>

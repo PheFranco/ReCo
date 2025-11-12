@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marketplace — ReCo</title>
+  <link rel="stylesheet" href="style/global.css" />
+  <style>
+    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; max-width:1100px; margin:32px auto }
+    .card{ background:#fff;padding:12px;border-radius:10px }
+    .card h3{ margin:8px 0 }
+    .thumb{ height:140px; background:#f3f3f3; border-radius:8px }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div style="max-width:1100px;margin:96px auto 40px;padding:0 16px">
+      <h1>Marketplace</h1>
+      <p>Explore itens doados e reutilizáveis perto de você.</p>
+      <div class="grid">
+        <div class="card card-elevated">
+          <div class="thumb"></div>
+          <h3>Cadeira usada</h3>
+          <p class="text-sm">Doada por Maria • Boa condição</p>
+          <div style="margin-top:8px"><button class="btn">Ver</button></div>
+        </div>
+        <div class="card card-elevated">
+          <div class="thumb"></div>
+          <h3>Livros diversos</h3>
+          <p class="text-sm">Doados por Biblioteca Comunitária</p>
+          <div style="margin-top:8px"><button class="btn">Ver</button></div>
+        </div>
+        <div class="card card-elevated">
+          <div class="thumb"></div>
+          <h3>Mesa pequena</h3>
+          <p class="text-sm">Doada por João</p>
+          <div style="margin-top:8px"><button class="btn">Ver</button></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+  <script src="/Front-end/js/header.js"></script>
+</body>
+</html>

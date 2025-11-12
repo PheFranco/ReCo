@@ -1,6 +1,14 @@
 import { Logo, TR3VOSLogo } from "./logo";
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerClose } from "./ui/drawer";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "./ui/dropdown-menu";
 
 interface HeaderProps {
   onNavigate: (section: string) => void;
@@ -41,38 +49,23 @@ export function Header({ onNavigate, isLoggedIn, onLogout }: HeaderProps) {
               Contato
             </button>
             {isLoggedIn ? (
-              <>
-                <button
-                  onClick={() => onNavigate('marketplace')}
-                  className="text-sm px-3 py-2 rounded-md hover:bg-[var(--color-cerrado-cream)] transition"
-                >
-                  Marketplace
-                </button>
-                <button
-                  onClick={() => onNavigate('chat')}
-                  className="text-sm px-3 py-2 rounded-md hover:bg-[var(--color-cerrado-cream)] transition"
-                >
-                  Chat
-                </button>
-                <button
-                  onClick={() => onNavigate('map')}
-                  className="text-sm px-3 py-2 rounded-md hover:bg-[var(--color-cerrado-cream)] transition"
-                >
-                  Mapa
-                </button>
-                <button
-                  onClick={() => onNavigate('profile')}
-                  className="text-sm px-3 py-2 rounded-md hover:bg-[var(--color-cerrado-cream)] transition"
-                >
-                  Perfil
-                </button>
-                <button
-                  onClick={onLogout}
-                  className="px-4 py-2 bg-[var(--color-cerrado-brown)] text-white rounded-lg text-sm hover:bg-[var(--color-cerrado-dark-brown)] transition-shadow shadow-sm"
-                >
-                  Sair
-                </button>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[var(--color-cerrado-cream)] transition">
+                    <User className="w-4 h-4" />
+                    <span className="text-sm">Minha conta</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>Conta</DropdownMenuLabel>
+                  <DropdownMenuItem onSelect={() => onNavigate('profile')}>Perfil</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onNavigate('marketplace')}>Minhas doações</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onNavigate('chat')}>Chats</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onNavigate('map')}>Mapa</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem data-variant="destructive" onSelect={onLogout}>Sair</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <button
                 onClick={() => onNavigate('login')}

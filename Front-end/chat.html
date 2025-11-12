@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chat — ReCo</title>
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+
+      <div class="composer">
+          if(t === 'entrar' || t === 'sair' || t === 'acessar'){
+            const p = a.parentElement; if(p) p.remove();
+          }
+        });
+        const dd = createDropdown();
+  <script src="/Front-end/js/header.js"></script>
+        ul.appendChild(dd);
+        const trigger = dd.querySelector('#userTrigger');
+        const menu = dd.querySelector('#userMenu');
+        trigger.addEventListener('click', ()=> menu.style.display = menu.style.display === 'none' ? 'block' : 'none');
+        document.addEventListener('click', (e)=> { if(!dd.contains(e.target)) menu.style.display = 'none'; });
+        const logout = dd.querySelector('#logoutLink');
+        logout.addEventListener('click', (e)=>{ e.preventDefault(); localStorage.removeItem('reco_token'); localStorage.removeItem('reco_userId'); localStorage.removeItem('reco_role'); window.location.href = 'login.html'; });
+      }
+    })();
+  </script>
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+
+      <div class="composer">
+        <input placeholder="Escreva sua mensagem..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #eee" />
+        <button class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Entrar — ReCo</title>
+  <link rel="stylesheet" href="style/global.css" />
+  <style>
+    .center-card{ max-width:420px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
+    .form-row{ margin-bottom:12px }
+    .btn{ display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer }
+    .btn-primary{ background:var(--color-cerrado-gold); color:var(--color-cerrado-dark-brown); border:none }
+    .btn-link{ background:none; border:none; color:var(--color-cerrado-green); text-decoration:underline }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="center-card card-elevated">
+      <h1 style="margin-top:0">Entrar</h1>
+    <p style="color:#6b4a3a">Entre com seu email e senha</p>
+  <form id="loginForm">
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="seu@exemplo.com" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" />
+        </div>
+        <div class="form-row">
+          <label for="password">Senha</label>
+          <input id="password" type="password" placeholder="••••••••" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" />
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <button class="btn btn-primary" type="submit">Entrar</button>
+          <div>
+            <a class="btn-link" href="forgot.html">Esqueci senha</a>
+            <span style="margin-left:8px">|</span>
+            <a class="btn-link" href="register.html" style="margin-left:8px">Cadastrar</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+  <script>
+    // intercept form and set a simple demo session in localStorage
+    (function(){
+      const form = document.getElementById('loginForm');
+      if(!form) return;
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        if(email && pass){
+          localStorage.setItem('reco_token','dev-token');
+          localStorage.setItem('reco_userId', email);
+          const role = email.indexOf('ong') !== -1 ? 'doador' : 'recebedor';
+          localStorage.setItem('reco_role', role);
+          window.location.href = 'profile.html';
+        } else {
+          alert('Preencha e-mail e senha');
+        }
+      });
+    })();
+  </script>
+
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+  <script src="/Front-end/js/header.js"></script>
+</body>
+</html>

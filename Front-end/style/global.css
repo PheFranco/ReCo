@@ -1,0 +1,197 @@
+:root{
+  --bg-cream: #fbf3e6; /* page background */
+  --band-peach: #f0cfae; /* peach band */
+  --panel-beige: #f7efe2;
+  --text-dark: #2e231c;
+  --muted: #7b6a60;
+  --accent: #c5662b;
+  --accent-dark: #a04a1f;
+  --green: #6bb24a;
+}
+
+html,body{height:100%;}
+body{
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  margin:0;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* containers */
+.container{max-width:1260px; margin:0 auto; padding:2.5rem 1.25rem}
+
+/* Header / Navigation layout */
+header{position:fixed; left:0; right:0; top:0; background:transparent; padding:1rem 0; z-index:1000}
+nav{max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem}
+.brand{font-weight:700; color:var(--text-dark);}
+nav ul{display:flex; gap:1rem; list-style:none; margin:0; padding:0; align-items:center}
+nav ul li a{color:var(--text-dark); text-decoration:none; padding:0.25rem 0.5rem}
+
+main{padding-top:110px}
+
+/* HERO */
+.hero{background:linear-gradient(180deg,var(--bg-cream) 0%, #fff 40%); padding:14rem 0 8rem}
+.hero-inner{display:flex; gap:2rem; align-items:center; justify-content:center; min-height:520px}
+.hero-left{flex:1}
+.hero-right{flex:1; text-align:center; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:1.5rem}
+.hero-illustration{max-width:480px; width:100%; height:auto; display:block; margin:0 auto; transition:opacity 0.45s ease}
+/* position the tree centered above the second column (hero-right) at all sizes */
+.hero-right{flex:1; text-align:center; position:relative; overflow:visible}
+/* position the tree above (acima) the hero-right block without overlapping it */
+.hero-illustration.tree-overlay{position:absolute; bottom:calc(100% + 40px); left:50%; width:500px; max-width:46%; transform:translateX(-50%); pointer-events:none; z-index:2}
+/* removed .hero-logo as logo is not needed in hero */
+.hero-title{font-family:'Playfair Display', serif; font-size:64px; line-height:1.02; margin:0; color:var(--text-dark)}
+.hero-sub{margin-top:0.8rem}
+.hero-title .accent{color:var(--accent); font-weight:700}
+.hero-title .green{color:var(--green)}
+.hero-title .amp{font-weight:700; color:var(--accent-dark); margin:0 0.4rem}
+.hero-sub{color:var(--muted); margin-top:0.75rem; font-size:1.05rem}
+
+/* Two-column intro */
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:2rem; padding:3rem 0}
+.two-col .text h2{font-family:'Playfair Display', serif; font-size:36px; margin:0 0 1rem}
+.two-col .text p{color:var(--muted); line-height:1.6}
+.card-media img{display:block; width:100%; height:100%; object-fit:cover}
+.card{background:var(--panel-beige); border-radius:8px; overflow:hidden}
+.card-elevated{box-shadow:0 12px 30px rgba(46,35,28,0.08)}
+
+/* Work section */
+.work{padding:3rem 0}
+.work-title{font-family:'Playfair Display', serif; font-size:32px; margin-bottom:1.25rem}
+.work-grid{display:grid; grid-template-columns:1fr 1fr; gap:2rem}
+.work-grid h3{margin-top:0}
+.work-grid p{color:var(--muted); line-height:1.6}
+
+/* Dropdown Button (keep previous behaviour but restyled) */
+.dropbtn{background-color:transparent; color:var(--text-dark); padding:8px 12px; font-size:15px; border:1px solid rgba(0,0,0,0.06); border-radius:6px}
+.dropdown{position:relative; display:inline-block}
+.dropdown-content{display:none; position:absolute; right:0; background-color:#fff; min-width:180px; box-shadow:0 8px 24px rgba(0,0,0,0.08); z-index:2; border-radius:8px; overflow:hidden}
+.dropdown-content a{color:var(--text-dark); padding:10px 14px; text-decoration:none; display:block}
+.dropdown:hover .dropdown-content{display:block}
+.dropdown-content a:hover{background:#f6f4f2}
+
+/* responsiveness */
+@media (max-width:900px){
+  .hero-inner{flex-direction:column; text-align:center}
+  .two-col{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr}
+  .hero-title{font-size:42px}
+}
+
+@media (max-width:480px){
+  .hero{padding:5rem 0 3rem}
+  main{padding-top:90px}
+}
+
+/* ensure the overlay doesn't break on small screens */
+@media (max-width:900px){
+  .hero-illustration.tree-overlay{bottom:calc(100% + 14px); width:260px; max-width:60%; transform:translateX(-50%)}
+}
+
+@media (max-width:480px){
+  .hero-illustration.tree-overlay{bottom:calc(100% + 10px); width:200px}
+}
+
+/* Numbers (estatísticas) */
+.numbers{padding:3rem 0; background:var(--band-peach)}
+.numbers-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; text-align:center}
+.stat{padding:1.25rem}
+.stat-value{font-family:'Playfair Display', serif; font-size:34px; color:var(--accent); font-weight:700}
+.stat-label{color:var(--muted); margin-top:0.5rem}
+
+/* Contact */
+.contact{padding:3rem 0}
+.contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start}
+.contact-info p{margin:0 0 0.6rem}
+.contact-form form{display:flex; flex-direction:column; gap:0.6rem}
+.contact-form input, .contact-form textarea{padding:0.75rem; border:1px solid #e6ded2; border-radius:6px}
+.contact-form label{font-size:0.9rem; color:var(--text-dark)}
+.btn{background:var(--accent); color:white; border:none; padding:0.75rem 1rem; border-radius:8px; cursor:pointer}
+
+@media (max-width:900px){
+  .numbers-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+}
+
+/* =========================
+   Pseudo-sombra performática
+   Implementação: .ipe-wrapper (envolve a imagem) + .ipe-wrapper::after (elipse desfocada)
+   Classe .animate-sun ativa a animação suave da sombra
+   ========================= */
+.ipe-wrapper{
+  position:relative;
+  display:inline-block;
+  width:auto; /* respeita o tamanho da imagem filha */
+}
+
+.ipe-wrapper .ipe-arvore{
+  display:block;
+  max-width:100%;
+  height:auto;
+  position:relative;
+  z-index:1; /* mantém a imagem acima da sombra */
+}
+
+.ipe-wrapper{
+  /* define variáveis padrão para a sombra que serão atualizadas por JS */
+  --shadow-x: -30%;    /* translateX value for shadow (center-based) */
+  --shadow-scale: 1.05; /* scaleX value */
+  --shadow-opacity: 0.95;
+}
+
+.ipe-wrapper::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: 80%;
+  height: 22%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.12) 60%, transparent 100%);
+  /* use CSS variables so JS can drive the shadow position/scale/opacity */
+  transform: translateX(var(--shadow-x)) scaleX(var(--shadow-scale));
+  opacity: var(--shadow-opacity);
+  filter: blur(8px);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 800ms cubic-bezier(.2,.9,.2,1), opacity 800ms ease;
+  will-change: transform, opacity;
+  z-index: 0; /* atrás da imagem */
+}
+
+/* ambient shadow on the opposite side: subtle, centered, always present */
+.ipe-wrapper::before{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  width: 60%;
+  height: 14%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.08) 60%, transparent 100%);
+  transform: translateX(-50%) scaleX(var(--ambient-scale,1));
+  opacity: var(--ambient-opacity,0.6);
+  filter: blur(10px);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 800ms cubic-bezier(.2,.9,.2,1), opacity 800ms ease;
+  will-change: transform, opacity;
+  z-index: 0;
+}
+
+/* animação da sombra (sol se movendo) */
+.ipe-wrapper.animate-sun::after{
+  animation: sun-shadow 8s linear infinite;
+}
+
+@keyframes sun-shadow{
+  0%   { transform: translateX(-30%) scaleX(1.05); opacity:0.95; }
+  50%  { transform: translateX(30%)  scaleX(0.9);  opacity:0.7;  }
+  100% { transform: translateX(-30%) scaleX(1.05); opacity:0.95; }
+}
+
+/* responsividade: reduzir sombra em telas pequenas */
+@media (max-width:900px){
+  .ipe-wrapper::after{ bottom:6%; height:18%; width:86%; filter:blur(6px); }
+}
+

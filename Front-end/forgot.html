@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recuperar senha — ReCo</title>
+  <link rel="stylesheet" href="style/global.css" />
+  <style>
+    .center-card{ max-width:420px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
+    .form-row{ margin-bottom:12px }
+    .btn{ display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer }
+    .btn-primary{ background:var(--color-cerrado-gold); color:var(--color-cerrado-dark-brown); border:none }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="login.html">Entrar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="center-card card-elevated">
+      <h1 style="margin-top:0">Recuperar senha</h1>
+      <p style="color:#6b4a3a">Informe seu email para receber instruções</p>
+  <form action="login.html" method="get">
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="seu@exemplo.com" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px">
+          <button class="btn btn-primary" type="submit">Enviar</button>
+        </div>
+      </form>
+      <p style="margin-top:12px">Voltar para <a href="login.html">entrar</a></p>
+    </div>
+  </main>
+
+  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
+    © 2025 ReCo — Demo estático
+  </footer>
+  <script src="/Front-end/js/header.js"></script>
+</body>
+</html>
