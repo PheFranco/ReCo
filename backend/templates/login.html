@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrar — ReCo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Local global styles (keeps your theme variables) -->
+    <link rel="stylesheet" href="/static/style/global.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-3">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Re<span style="color:var(--color-cerrado-green)">Co</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="/#hero">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="/marketplace/">Marketplace</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="/login/">Entrar</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+{% extends 'base.html' %}
+
+{% block title %}Entrar — ReCo{% endblock %}
+
+{% block content %}
+  <main class="min-vh-100 d-flex align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-5">
+          <div class="card shadow-sm rounded-4">
+            <div class="card-body p-4">
+              <h1 class="h3 mb-1">Entrar</h1>
+              <p class="text-muted mb-3">Entre com seu email e senha</p>
+
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input id="email" type="email" class="form-control" placeholder="seu@exemplo.com" required />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Senha</label>
+                  <input id="password" type="password" class="form-control" placeholder="••••••••" required />
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <button class="btn btn-primary" type="submit">Entrar</button>
+                  <div class="text-end">
+                    <a class="link-secondary me-2" href="/forgot.html">Esqueci senha</a>
+                    <span class="text-muted">|</span>
+                    <a class="link-secondary ms-2" href="/register/">Cadastrar</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <footer class="text-center mt-4 text-muted">© 2025 ReCo — Demo estático</footer>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Inline login handling (preserved) -->
+  <script>
+    (function(){
+      const form = document.getElementById('loginForm');
+      if(!form) return;
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        if(email && pass){
+          localStorage.setItem('reco_token','dev-token');
+          localStorage.setItem('reco_userId', email);
+          const role = email.indexOf('ong') !== -1 ? 'doador' : 'recebedor';
+          localStorage.setItem('reco_role', role);
+          window.location.href = '/profile/';
+        } else {
+          alert('Preencha e-mail e senha');
+        }
+      });
+    })();
+  </script>
+{% endblock %}
+  </body>
+</html>

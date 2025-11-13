@@ -23,16 +23,22 @@ body{
 .container{max-width:1260px; margin:0 auto; padding:2.5rem 1.25rem}
 
 /* Header / Navigation layout */
-header{position:fixed; left:0; right:0; top:0; background:transparent; padding:1rem 0; z-index:1000}
-nav{max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem}
-.brand{font-weight:700; color:var(--text-dark);}
-nav ul{display:flex; gap:1rem; list-style:none; margin:0; padding:0; align-items:center}
-nav ul li a{color:var(--text-dark); text-decoration:none; padding:0.25rem 0.5rem}
+header{position:fixed; left:0; right:0; top:0; background-color: rgba(255,255,255,0.28); padding:1rem 0; z-index:1000; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 20px rgba(20,20,20,0.04);}
+header nav{max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem}
+.brand{font-weight:700; color:var(--text-dark);} 
+header nav ul{display:flex; gap:1rem; list-style:none; margin:0; padding:0; align-items:center}
+header nav ul li a{color:var(--text-dark); text-decoration:none; padding:0.25rem 0.5rem}
 
-main{padding-top:110px}
+main{padding-top:90px}
+
+/* Header container: remove vertical container padding so collapsed menu sits flush */
+header .container { padding-top: 0; padding-bottom: 0; }
+
+/* Slightly tighter header for visual compactness */
+header { padding: 0.6rem 0; }
 
 /* HERO */
-.hero{background:linear-gradient(180deg,var(--bg-cream) 0%, #fff 40%); padding:14rem 0 8rem}
+.hero{background:linear-gradient(180deg,var(--bg-cream) 0%, #fff 40%); padding:6rem 0 6rem}
 .hero-inner{display:flex; gap:2rem; align-items:center; justify-content:center; min-height:520px}
 .hero-left{flex:1}
 .hero-right{flex:1; text-align:center; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:1.5rem}
@@ -40,7 +46,18 @@ main{padding-top:110px}
 /* position the tree centered above the second column (hero-right) at all sizes */
 .hero-right{flex:1; text-align:center; position:relative; overflow:visible}
 /* position the tree above (acima) the hero-right block without overlapping it */
-.hero-illustration.tree-overlay{position:absolute; bottom:calc(100% + 40px); left:50%; width:500px; max-width:46%; transform:translateX(-50%); pointer-events:none; z-index:2}
+/* Place the decorative tree in the normal flow above the title (not overlapping) */
+.hero-illustration.tree-overlay{
+  position: relative; /* keeps it in flow so it pushes the title down/away */
+  display: block;
+  margin: 0 auto 1rem; /* spacing below the tree */
+  width: 500px;
+  max-width: 46%;
+  left: auto;
+  transform: none;
+  pointer-events: none;
+  z-index: 0;
+}
 /* removed .hero-logo as logo is not needed in hero */
 .hero-title{font-family:'Playfair Display', serif; font-size:64px; line-height:1.02; margin:0; color:var(--text-dark)}
 .hero-sub{margin-top:0.8rem}
@@ -81,17 +98,54 @@ main{padding-top:110px}
 }
 
 @media (max-width:480px){
-  .hero{padding:5rem 0 3rem}
-  main{padding-top:90px}
+  .hero{padding:3.5rem 0 2.5rem}
+  main{padding-top:80px}
 }
 
 /* ensure the overlay doesn't break on small screens */
 @media (max-width:900px){
-  .hero-illustration.tree-overlay{bottom:calc(100% + 14px); width:260px; max-width:60%; transform:translateX(-50%)}
+  .hero-illustration.tree-overlay{ width:260px; max-width:60%; margin-bottom:0.8rem }
 }
 
 @media (max-width:480px){
-  .hero-illustration.tree-overlay{bottom:calc(100% + 10px); width:200px}
+  .hero-illustration.tree-overlay{ width:200px; margin-bottom:0.6rem }
+}
+
+/* Small screens: keep header readable and prevent hero illustration overlapping */
+@media (max-width:700px){
+  header { background-color: rgba(255,255,255,0.28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .hero-illustration.tree-overlay{ margin-bottom:0.6rem }
+}
+
+/* Very small screens: reduce the tree size and keep it visible but lower */
+@media (max-width:420px){
+  .hero-illustration.tree-overlay{ width:160px; margin-bottom:0.4rem }
+  header { background-color: rgba(255,255,255,0.28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.12); }
+}
+
+/* Ensure hero title and subtitle sit above decorative tree */
+.hero-title, .hero-sub { position: relative; z-index: 5; }
+
+/* make sure the image itself doesn't have a higher stacking context */
+.hero-illustration .ipe-arvore { position: relative; z-index: 0; }
+
+/* Ensure bootstrap collapsed navbar menu appears below header on small screens */
+@media (max-width: 991px){
+  header .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255,255,255,0.28);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    padding: 0.5rem 1rem;
+    z-index: 1100;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  header .navbar-collapse .navbar-nav { flex-direction: column; }
+  header .navbar-toggler { z-index: 1110; }
 }
 
 /* Numbers (estatísticas) */
@@ -194,4 +248,13 @@ main{padding-top:110px}
 @media (max-width:900px){
   .ipe-wrapper::after{ bottom:6%; height:18%; width:86%; filter:blur(6px); }
 }
+
+/* Sections: smooth reveal and soft separators */
+section { scroll-margin-top: 100px; transition: opacity .6s ease, transform .6s ease, background-color .28s ease; border-top: 1px solid rgba(16,12,10,0.03); padding-top: 2rem; padding-bottom: 2rem; }
+section.section-transition { opacity: 0; transform: translateY(12px); }
+section.section-transition.in-view { opacity: 1; transform: none; }
+section::before{ content: ''; display:block; height:18px; margin-top:-18px; pointer-events:none; background: linear-gradient(180deg, rgba(255,255,255,0), rgba(0,0,0,0.01)); }
+
+/* Remove top border for the first section (hero) so it sits flush under the header */
+#hero { border-top: none; padding-top: 2.5rem; }
 

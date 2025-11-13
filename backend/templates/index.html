@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}ReCo — Reutiliza & Conecta{% endblock %}
+
+{% block content %}
+  <!-- Hero -->
+  <section id="hero" class="hero">
+    <div class="hero-inner container">
+      <div class="hero-right">
+        <div class="hero-illustration tree-overlay ipe-wrapper animate-sun mb-3">
+          <img id="hero-tree" src="/static/style/assets/arvore.png" alt="árvore" class="ipe-arvore img-fluid">
+        </div>
+        <h1 class="hero-title"><span class="accent">Re</span>utiliza <span class="amp">&</span> <span class="accent green">Co</span>necta</h1>
+        <p class="hero-sub">Conexão que transforma descarte em oportunidade.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="two-col container">
+    <div class="col text">
+      <h2>Talvez lixo?</h2>
+      <p>Só esse ano cerca de 450 toneladas de lixo eletrônico foi descartado nos pontos de entrega voluntária, porém esse número pode ser bem maior tendo em vista se uma grande parte da população do DF não tiver conhecimento sobre tais pontos.</p>
+    </div>
+    <div class="col media">
+      <div class="card card-elevated card-media">
+        <img src="/static/style/assets/bin.svg" alt="lixo eletrônico" onerror="this.style.display='none'">
+      </div>
+    </div>
+  </section>
+
+  <section class="work container">
+    <h2 class="work-title">Nosso <em>Trabalho</em></h2>
+    <div class="work-grid">
+      <div>
+        <h3>Qual a ideia do projeto ?</h3>
+        <p>Conectar quem precisa doar ou descartar aparelhos e peças eletrônicas, para quem possa receber e fazer um uso devido, como: ONG's que precisam de computador para pessoas carentes ou artistas que reutilizam peças para gerar arte.</p>
+      </div>
+      <div>
+        <p>Poderia ser profissionais que fazem manutenção e concerto e podem tirar partes ainda funcionais e reutilizáveis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="numbers" class="numbers container">
+    <div class="numbers-grid">
+      <div class="stat">
+        <div class="stat-value">450t</div>
+        <div class="stat-label">Lixo eletrônico coletado</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">120</div>
+        <div class="stat-label">Pontos de entrega</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">85</div>
+        <div class="stat-label">ONGs conectadas</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact container">
+    <h2>Contato</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>Tem uma dúvida ou quer colaborar? Fale conosco:</p>
+        <p><strong>Email:</strong> contato@reco.org</p>
+        <p><strong>Telefone:</strong> (61) 99999-9999</p>
+        <p><strong>Endereço:</strong> Brasília - DF</p>
+      </div>
+      <div class="contact-form">
+        <form id="contactForm" onsubmit="event.preventDefault(); alert('Mensagem enviada (demo)'); this.reset();">
+          <label for="name">Nome</label>
+          <input id="name" name="name" required />
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required />
+          <label for="message">Mensagem</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+          <button class="btn" type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+

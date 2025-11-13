@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Recuperar senha — ReCo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style/global.css" />
   <style>
     .center-card{ max-width:420px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
@@ -12,38 +13,52 @@
     .btn-primary{ background:var(--color-cerrado-gold); color:var(--color-cerrado-dark-brown); border:none }
   </style>
 </head>
-<body>
-  <header>
-    <nav>
-      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
-      <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="login.html">Entrar</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <div class="center-card card-elevated">
-      <h1 style="margin-top:0">Recuperar senha</h1>
-      <p style="color:#6b4a3a">Informe seu email para receber instruções</p>
-  <form action="login.html" method="get">
-        <div class="form-row">
-          <label for="email">Email</label>
-          <input id="email" type="email" placeholder="seu@exemplo.com" style="width:100%;padding:8px;border:1px solid #eee;border-radius:8px" />
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+        <div class="container">
+          <a class="navbar-brand fw-bold" href="index.html">Re<span style="color:var(--color-cerrado-green)">Co</span></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+              <li class="nav-item"><a class="nav-link" href="marketplace.html">Marketplace</a></li>
+              <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+            </ul>
+          </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:12px">
-          <button class="btn btn-primary" type="submit">Enviar</button>
-        </div>
-      </form>
-      <p style="margin-top:12px">Voltar para <a href="login.html">entrar</a></p>
-    </div>
-  </main>
+      </nav>
+    </header>
 
-  <footer style="text-align:center;margin:40px 0;color:#8b6a56">
-    © 2025 ReCo — Demo estático
-  </footer>
-  <script src="/Front-end/js/header.js"></script>
-</body>
+    <main class="min-vh-100 d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-5">
+            <div class="card shadow-sm">
+              <div class="card-body p-4">
+                <h1 class="h4 mb-1">Recuperar senha</h1>
+                <p class="text-muted mb-3">Informe seu email para receber instruções</p>
+                <form action="login.html" method="get">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" type="email" class="form-control" placeholder="seu@exemplo.com" />
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                  </div>
+                </form>
+                <p class="mt-3">Voltar para <a href="login.html">entrar</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="text-center mt-4 text-muted">© 2025 ReCo — Demo estático</footer>
+    <script src="js/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

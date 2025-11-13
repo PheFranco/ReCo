@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perfil — ReCo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style/global.css" />
+  <style>
+    .profile-card{ max-width:680px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
+    .avatar{ width:96px; height:96px; border-radius:9999px; background:#f3f3f3 }
+    .meta{ display:flex; gap:16px; align-items:center }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">Re<span style="color:var(--color-cerrado-green)">Co</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="/marketplace/">Marketplace</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login/">Entrar</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+{% extends 'base.html' %}
+
+{% block title %}Perfil — ReCo{% endblock %}
+
+{% block content %}
+  <div class="container py-5">
+    <div id="profileContent" class="card shadow-sm p-4 mx-auto" style="max-width:720px"></div>
+  </div>
+  <script>
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || 'Nome do Usuário';
+      const email = params.get('email') || 'usuario@exemplo.com';
+      const role = params.get('role') || 'doador';
+      const doador_type = params.get('doador_type') || 'pf';
+      const recebedor_subtype = params.get('recebedor_subtype') || '';
+      const razao = params.get('razao') || '';
+
+      const root = document.getElementById('profileContent');
+      let html = '';
+      html += `<div class="meta"><div class="avatar"></div><div><h2>${escapeHtml(name)}</h2><p style="color:#6b4a3a">${escapeHtml(email)}</p></div></div>`;
+
+      if(role === 'doador'){
+        html += `<section style="margin-top:20px"><h3>Visão do doador</h3>`;
+        if(doador_type === 'ong'){
+          html += `<p><strong>Razão social:</strong> ${escapeHtml(razao || '—')}</p>`;
+        }
+        html += `<p><a href="/chat.html">Chats (conversas sobre doações)</a></p>`;
+        // add item form for donors
+        html += `</section>`;
+        html += `<section style="margin-top:18px"><h3>Adicionar item ao Marketplace</h3>
+          <form id="addItemForm" class="mt-2">
+            <div class="mb-2"><label class="form-label">Título</label><input name="title" class="form-control" required></div>
+            <div class="mb-2"><label class="form-label">Descrição</label><textarea name="desc" class="form-control" rows="2"></textarea></div>
+            <div class="mb-2"><label class="form-label">URL da imagem (opcional)</label><input name="image" class="form-control" placeholder="https://"></div>
+            <div><button class="btn btn-primary" type="submit">Adicionar item</button></div>
+          </form>
+          <div id="myItems" class="mt-3"></div>
+        </section>`;
+      } else {
+        html += `<section style="margin-top:20px"><h3>Visão do recebedor</h3>`;
+        html += `<p><strong>Tipo:</strong> ${escapeHtml(recebedor_subtype || 'Pessoa')}</p>`;
+        html += `</section>`;
+      }
+
+      html += `<section style="margin-top:12px"><h3>Configurações</h3><ul><li><a href="#">Alterar senha</a></li><li><a href="#">Editar perfil</a></li><li><a href="/login/">Sair</a></li></ul></section>`;
+
+      root.innerHTML = html;
+
+      // After rendering, wire up add-item form for donors
+      if(role === 'doador'){
+        const addForm = document.getElementById('addItemForm');
+        const myItems = document.getElementById('myItems');
+        function loadMyItems(){
+          let items = [];
+          try{ items = JSON.parse(localStorage.getItem('marketplace_items')||'[]'); }catch(e){ items = []; }
+          const user = localStorage.getItem('reco_userId') || email;
+          const mine = items.filter(i=> i.donor === user);
+          if(mine.length === 0){ myItems.innerHTML = '<p class="text-muted">Você ainda não adicionou itens.</p>'; return; }
+          myItems.innerHTML = '<ul class="list-group">' + mine.map(i=>`<li class="list-group-item d-flex justify-content-between align-items-start"><div><strong>${escapeHtml(i.title)}</strong><div class="small text-muted">${escapeHtml(i.desc||'')}</div></div><button data-id="${i.id}" class="btn btn-sm btn-outline-danger remove-item">Remover</button></li>`).join('') + '</ul>';
+          Array.from(myItems.querySelectorAll('.remove-item')).forEach(btn=> btn.addEventListener('click', function(){
+            const id = this.getAttribute('data-id');
+            let items = JSON.parse(localStorage.getItem('marketplace_items')||'[]');
+            items = items.filter(it=> String(it.id) !== String(id));
+            localStorage.setItem('marketplace_items', JSON.stringify(items));
+            loadMyItems();
+          }));
+        }
+
+        addForm.addEventListener('submit', function(e){
+          e.preventDefault();
+          const fd = new FormData(addForm);
+          const item = { id: Date.now(), title: fd.get('title'), desc: fd.get('desc'), image: fd.get('image'), donor: localStorage.getItem('reco_userId') || email };
+          let items = [];
+          try{ items = JSON.parse(localStorage.getItem('marketplace_items')||'[]'); }catch(e){ items = []; }
+          items.unshift(item);
+          localStorage.setItem('marketplace_items', JSON.stringify(items));
+          // redirect to marketplace to see it
+          window.location.href = '/marketplace/';
+        });
+
+        // initial load
+        loadMyItems();
+      }
+
+      function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    })();
+  </script>
+{% endblock %}
+

@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Perfil — ReCo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style/global.css" />
   <style>
     .profile-card{ max-width:680px; margin:96px auto; padding:24px; background:#fff; border-radius:12px }
@@ -13,18 +14,27 @@
 </head>
 <body>
   <header>
-    <nav>
-      <div class="brand">Re<span style="color:var(--color-cerrado-green)">Co</span></div>
-      <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="login.html">Entrar</a></li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">Re<span style="color:var(--color-cerrado-green)">Co</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="marketplace.html">Marketplace</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
 
   <main>
-    <div id="profileContent"></div>
+    <div class="container py-5">
+      <div id="profileContent" class="card shadow-sm p-4 mx-auto" style="max-width:720px"></div>
+    </div>
     <script>
       (function(){
         const params = new URLSearchParams(window.location.search);
@@ -45,7 +55,17 @@
             html += `<p><strong>Razão social:</strong> ${escapeHtml(razao || '—')}</p>`;
           }
           html += `<p><a href="chat.html">Chats (conversas sobre doações)</a></p>`;
+          // add item form for donors
           html += `</section>`;
+          html += `<section style="margin-top:18px"><h3>Adicionar item ao Marketplace</h3>
+            <form id="addItemForm" class="mt-2">
+              <div class="mb-2"><label class="form-label">Título</label><input name="title" class="form-control" required></div>
+              <div class="mb-2"><label class="form-label">Descrição</label><textarea name="desc" class="form-control" rows="2"></textarea></div>
+              <div class="mb-2"><label class="form-label">URL da imagem (opcional)</label><input name="image" class="form-control" placeholder="https://"></div>
+              <div><button class="btn btn-primary" type="submit">Adicionar item</button></div>
+            </form>
+            <div id="myItems" class="mt-3"></div>
+          </section>`;
         } else {
           html += `<section style="margin-top:20px"><h3>Visão do recebedor</h3>`;
           html += `<p><strong>Tipo:</strong> ${escapeHtml(recebedor_subtype || 'Pessoa')}</p>`;
@@ -56,6 +76,42 @@
 
         root.innerHTML = html;
 
+        // After rendering, wire up add-item form for donors
+        if(role === 'doador'){
+          const addForm = document.getElementById('addItemForm');
+          const myItems = document.getElementById('myItems');
+          function loadMyItems(){
+            let items = [];
+            try{ items = JSON.parse(localStorage.getItem('marketplace_items')||'[]'); }catch(e){ items = []; }
+            const user = localStorage.getItem('reco_userId') || email;
+            const mine = items.filter(i=> i.donor === user);
+            if(mine.length === 0){ myItems.innerHTML = '<p class="text-muted">Você ainda não adicionou itens.</p>'; return; }
+            myItems.innerHTML = '<ul class="list-group">' + mine.map(i=>`<li class="list-group-item d-flex justify-content-between align-items-start"><div><strong>${escapeHtml(i.title)}</strong><div class="small text-muted">${escapeHtml(i.desc||'')}</div></div><button data-id="${i.id}" class="btn btn-sm btn-outline-danger remove-item">Remover</button></li>`).join('') + '</ul>';
+            Array.from(myItems.querySelectorAll('.remove-item')).forEach(btn=> btn.addEventListener('click', function(){
+              const id = this.getAttribute('data-id');
+              let items = JSON.parse(localStorage.getItem('marketplace_items')||'[]');
+              items = items.filter(it=> String(it.id) !== String(id));
+              localStorage.setItem('marketplace_items', JSON.stringify(items));
+              loadMyItems();
+            }));
+          }
+
+          addForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const fd = new FormData(addForm);
+            const item = { id: Date.now(), title: fd.get('title'), desc: fd.get('desc'), image: fd.get('image'), donor: localStorage.getItem('reco_userId') || email };
+            let items = [];
+            try{ items = JSON.parse(localStorage.getItem('marketplace_items')||'[]'); }catch(e){ items = []; }
+            items.unshift(item);
+            localStorage.setItem('marketplace_items', JSON.stringify(items));
+            // redirect to marketplace to see it
+            window.location.href = 'marketplace.html';
+          });
+
+          // initial load
+          loadMyItems();
+        }
+
         function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
       })();
     </script>
@@ -64,6 +120,7 @@
   <footer style="text-align:center;margin:40px 0;color:#8b6a56">
     © 2025 ReCo — Demo estático
   </footer>
-  <script src="/Front-end/js/header.js"></script>
+  <script src="js/header.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
