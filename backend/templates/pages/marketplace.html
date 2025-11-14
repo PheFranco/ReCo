@@ -1,0 +1,77 @@
+{% load static %}
+{% extends 'base.html' %}
+{% block title %}Marketplace — ReCo{% endblock %}
+{% block content %}
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2>Marketplace de Doações</h2>
+        <p class="text-muted">Conecte-se com doadores e recebedores de materiais reutilizáveis.</p>
+      </div>
+      <a id="create-item-btn" class="btn btn-success" href="#" data-bs-toggle="modal" data-bs-target="#createItemModal">Cadastrar Item</a>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="mb-3">
+          <input id="mp-search" class="form-control" placeholder="Pesquisar..." />
+        </div>
+        <div class="list-group mb-4" id="mp-categories">
+          <a class="list-group-item list-group-item-action" data-cat="">Todos</a>
+          <a class="list-group-item list-group-item-action" data-cat="Eletrônicos">Eletrônicos</a>
+          <a class="list-group-item list-group-item-action" data-cat="Móveis">Móveis</a>
+          <a class="list-group-item list-group-item-action" data-cat="Roupas">Roupas</a>
+        </div>
+      </div>
+
+      <!-- Create Item Modal -->
+      <div class="modal fade" id="createItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cadastrar Item</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="create-item-form" enctype="multipart/form-data" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label class="form-label">Título</label>
+                  <input name="title" id="item-title" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <textarea name="description" id="item-description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Categoria</label>
+                  <input name="category" id="item-category" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Localização</label>
+                  <input name="location" id="item-location" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Foto (opcional)</label>
+                  <input name="photo" id="item-photo" type="file" accept="image/*" class="form-control" />
+                </div>
+                <div id="create-item-feedback"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div id="marketplace-items" class="row g-3"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_scripts %}
+  <script src="{% static 'js/marketplace.js' %}"></script>
+{% endblock %}

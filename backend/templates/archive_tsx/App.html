@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+{% endblock %}
+{% extends "base.html" %}
+{% block title %}ReCo — Home{% endblock %}
+{% block content %}
+	{% include 'includes/hero.html' %}
+
+	<section class="py-5">
+		<div class="container">
+			{% include 'archive_tsx/About.html' %}
+			{% include 'archive_tsx/Features.html' %}
+			{% include 'archive_tsx/Contact.html' %}
+		</div>
+	</section>
+{% endblock %}

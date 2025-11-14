@@ -1,7 +1,46 @@
 {% load static %}
+<header class="py-3 border-bottom bg-white">
+  <div class="container d-flex flex-wrap align-items-center justify-content-between">
+    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+      <img src="{% static 'style/assets/logo-reco.svg' %}" alt="ReCo" style="height:36px; margin-right:8px;"/>
+      <strong>ReCo</strong>
+    </a>
+
+    <nav class="nav">
+      <a class="nav-link px-2 link-secondary" href="/">Início</a>
+      <a class="nav-link px-2 link-secondary" href="{% url 'web:archive' name='About' %}">Sobre</a>
+      <a class="nav-link px-2 link-secondary" href="{% url 'web:archive' name='Contact' %}">Contato</a>
+      <a class="nav-link px-2 link-secondary" href="{% url 'web:archive' name='Marketplace' %}">Marketplace</a>
+    </nav>
+
+    <div>
+      {% if is_logged_in %}
+        <div class="dropdown">
+          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            Minha Conta
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+            <li><a class="dropdown-item" href="{% url 'web:profile' %}">Perfil</a></li>
+            <li><a class="dropdown-item" href="{% url 'web:marketplace' %}">Minhas doações</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Sair</a></li>
+          </ul>
+        </div>
+      {% else %}
+        <a class="btn btn-warning text-dark" href="{% url 'web:login' %}">Entrar</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+{% load static %}
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
     <div class="container">
+{% load static %}
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+    <div class="container">
+      <img src="{% static 'style/assets/logo-reco.svg' %}" alt="ReCo" style="height:36px; margin-right:8px;"/>
       <a class="navbar-brand fw-bold" href="/">Re<span style="color:var(--color-cerrado-green)">Co</span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

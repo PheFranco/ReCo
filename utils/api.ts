@@ -20,6 +20,19 @@ function isNetworkError(err: any) {
   return msg.includes("failed to fetch") || msg.includes("networkerror") || msg.includes("connectionrefused") || msg.includes("network request failed");
 }
 
+function getCookie(name: string) {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()!.split(';').shift() || null;
+  return null;
+}
+
+function csrfHeader() {
+  const token = getCookie('csrftoken');
+  return token ? { 'X-CSRFToken': token } : {};
+}
+
 async function fetchOrMock(fetcher: () => Promise<any>, mocker: () => any) {
   if (USE_MOCKS) {
     return mocker();
@@ -40,7 +53,7 @@ export async function apiLogin(email: string) {
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, csrfHeader()),
       body: JSON.stringify({ email }),
     });
     if (!res.ok) throw new Error(`Login failed: ${res.status}`);
@@ -60,7 +73,7 @@ export async function apiContact(payload: any) {
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/contact`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, csrfHeader()),
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`Contact failed: ${res.status}`);
@@ -72,7 +85,7 @@ export async function apiCreateItem(payload: any) {
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/items`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, csrfHeader()),
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`Create item failed: ${res.status}`);
@@ -100,7 +113,7 @@ export async function apiDeleteItem(id: number | string, token?: string) {
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/items/${id}`, {
       method: "DELETE",
-      headers,
+      headers: Object.assign(headers, csrfHeader()),
     });
     if (!res.ok) throw new Error(`Delete item failed: ${res.status}`);
     return res.json();
@@ -127,7 +140,7 @@ export async function apiUpdateProfile(token: string, payload: any) {
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/profile`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: Object.assign({ "Content-Type": "application/json", Authorization: `Bearer ${token}` }, csrfHeader()),
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`Update profile failed: ${res.status}`);
@@ -154,7 +167,7 @@ export async function apiPatchItem(id: number | string, token: string | undefine
   return fetchOrMock(async () => {
   const res = await fetch(`${API_BASE}/items/${id}`, {
       method: "PATCH",
-      headers,
+      headers: Object.assign(headers, csrfHeader()),
       body: JSON.stringify(payload),
     });
     if (!res.ok) throw new Error(`Patch item failed: ${res.status}`);
