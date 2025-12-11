@@ -1,0 +1,13 @@
+from django.test import TestCase
+
+class PerfilModelTest(TestCase):
+    def setUp(self):
+        # Configuração inicial para os testes
+
+    def test_exemplo_funcionalidade(self):
+        # Teste de uma funcionalidade específica
+        self.assertEqual(1 + 1, 2)
+
+    def test_outro_exemplo(self):
+        # Outro teste para verificar uma funcionalidade
+        self.assertTrue(True)

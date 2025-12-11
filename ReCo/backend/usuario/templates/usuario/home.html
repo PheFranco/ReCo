@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Área do Usuário — ReCo{% endblock %}
+
+{% block content %}
+  <div class="container d-flex flex-column gap-4">
+    <section class="section-card">
+      <h1 class="h3 mb-3">Olá{% if request.user.is_authenticated %}, {{ request.user.first_name|default:request.user.username }}{% endif %}!</h1>
+      <p class="text-muted">Aqui você encontra atalhos rápidos para entrar, criar conta, ajustar o perfil e acompanhar os anúncios publicados.</p>
+    </section>
+
+    <section class="card-grid">
+      <article class="section-card">
+        <h3>Entrar</h3>
+        <p class="text-muted">Acesse o painel e continue de onde parou.</p>
+        <a class="btn btn-primary" href="{% url 'usuario:login' %}">Fazer login</a>
+      </article>
+      <article class="section-card">
+        <h3>Criar uma conta</h3>
+        <p class="text-muted">Registre dados básicos, escolha o tipo de usuário e personalize o perfil.</p>
+        <a class="btn btn-outline-primary" href="{% url 'usuario:register' %}">Quero me cadastrar</a>
+      </article>
+      <article class="section-card">
+        <h3>Perfil &amp; Preferências</h3>
+        <p class="text-muted">Atualize telefone, cidade, CPF/CNPJ e descreva a organização.</p>
+        <a class="btn btn-secondary" href="{% url 'perfil:index' %}">Ver perfil</a>
+      </article>
+    </section>
+
+    <section class="section-card">
+      <h2 class="h4">Precisa de ajuda?</h2>
+      <ul class="text-muted">
+        <li>Envie um e-mail para <a href="mailto:contato@reco.com">contato@reco.com</a>.</li>
+  <li>Consulte o <a href="{% url 'doacoes:index' %}">doações</a> para saber como os anúncios aparecem.</li>
+        <li>Use o chat em cada anúncio para combinar detalhes com segurança.</li>
+      </ul>
+    </section>
+  </div>
+{% endblock %}

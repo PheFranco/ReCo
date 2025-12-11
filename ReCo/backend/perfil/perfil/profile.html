@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meu Perfil — ReCo{% endblock %}
+
+{% block content %}
+<section class="profile">
+  <h1>Meu Perfil</h1>
+
+  <dl>
+    <dt>Usuário</dt><dd>{{ user.username }}</dd>
+
+    <dt>Nome</dt><dd>{{ user.first_name }}</dd>
+
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+
+    <dt>Telefone</dt><dd>{{ profile.phone|default:"—" }}</dd>
+
+    <dt>Cidade</dt><dd>{{ profile.get_city_display|default:profile.city }}</dd>
+
+    <dt>Tipo de usuário</dt><dd>{{ profile.get_user_type_display|default:profile.user_type }}</dd>
+
+    <dt>CPF / CNPJ</dt><dd>{{ profile.cpf_cnpj|default:"—" }}</dd>
+
+    <dt>Razão social</dt><dd>{{ profile.razao_social|default:"—" }}</dd>
+
+    <dt>Data de nascimento</dt><dd>{% if profile.birth_date %}{{ profile.birth_date|date:"d/m/Y" }}{% else %}—{% endif %}</dd>
+  </dl>
+
+  <p><a href="{% url 'usuario:index' %}">Voltar</a></p>
+</section>
+{% endblock %}

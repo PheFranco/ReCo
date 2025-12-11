@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}ReCo — Reutiliza &amp; Conecta{% endblock %}
+
+{% block content %}
+  <section class="hero-banner" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; margin-left: calc(-50vw + 50%); padding: 10px 2rem; min-height: 85vh; margin-top: 0;">
+    <p style="font-size: 1.8rem; letter-spacing: 3px; color: rgba(255,255,255,0.95); margin: 0 auto 1.5rem auto; text-transform: uppercase; font-weight: 700; width: 100%;">ReCo — Reutilize &amp; Conecte</p>
+    <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Transforme eletrônicos parados em novas histórias</h1>
+    <p style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Conectamos quem precisa descartar ou doar equipamentos com ONGs, reparadores e makers que dão um novo propósito para cada componente.</p>
+    <div class="cta-group" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a class="btn btn-light btn-lg" href="{% url 'doacoes:create' %}">Anunciar item</a>
+      <a class="btn btn-outline-light btn-lg" href="{% url 'doacoes:index' %}">Explorar itens</a>
+    </div>
+  </section>
+
+  <div class="container d-flex flex-column gap-4">
+      <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+        <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">Como o ReCo funciona?</h2>
+        <p class="text-muted" style="font-size: 1.05rem; margin-bottom: 2rem;">Criamos uma jornada simples para cadastrar itens, conversar com interessados e acompanhar o impacto gerado pelas doações.</p>
+        <ul class="list-unstyled fw-medium text-muted" style="font-size: 1rem; line-height: 1.8; margin-bottom: 3rem;">
+          <li>✓ Cadastre o item com fotos, estado e cidade.</li>
+          <li>✓ Receba mensagens de interessados diretamente no chat.</li>
+          <li>✓ Combine a retirada ou envio e marque o item como entregue.</li>
+        </ul>
+        
+        <div class="stat-grid">
+          <div class="stat-card" style="font-size: 1.1rem; padding: 1.5rem; text-align: center;">
+            <strong style="font-size: 2.5rem; display: block;">1.2k</strong>
+            <div style="margin-top: 0.5rem;">Usuários ativos</div>
+          </div>
+          <div class="stat-card" style="font-size: 1.1rem; padding: 1.5rem; text-align: center;">
+            <strong style="font-size: 2.5rem; display: block;">640</strong>
+            <div style="margin-top: 0.5rem;">Itens doados</div>
+          </div>
+          <div class="stat-card" style="font-size: 1.1rem; padding: 1.5rem; text-align: center;">
+            <strong style="font-size: 2.5rem; display: block;">310</strong>
+            <div style="margin-top: 0.5rem;">Reuso garantido</div>
+          </div>
+          <div class="stat-card" style="font-size: 1.1rem; padding: 1.5rem; text-align: center;">
+            <strong style="font-size: 2.5rem; display: block;">18</strong>
+            <div style="margin-top: 0.5rem;">Parceiros locais</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-grid">
+      <article class="section-card">
+        <h3>Para quem doa</h3>
+        <p class="text-muted">Descarte correto, impacto social e transparência no destino final.</p>
+        <ul>
+          <li>Escolha quem vai receber com base nas mensagens.</li>
+          <li>Acompanhe o status diretamente no painel.</li>
+          <li>Receba dicas para preparo e embalagem dos itens.</li>
+        </ul>
+      </article>
+      <article class="section-card">
+        <h3>Para quem recebe</h3>
+        <p class="text-muted">Filtre por categoria, estado e região para encontrar o que precisa.</p>
+        <ul>
+          <li>Alertas de novos itens na sua cidade.</li>
+          <li>Chat integrado para combinar a logística.</li>
+          <li>Histórico das solicitações em um só lugar.</li>
+        </ul>
+      </article>
+      <article class="section-card">
+        <h3>Impacto coletivo</h3>
+        <p class="text-muted">Relatórios compartilháveis que exibem CO₂ evitado e horas de formação apoiadas.</p>
+        <ul>
+          <li>Indicadores de descarte responsável.</li>
+          <li>Histórias das iniciativas atendidas.</li>
+          <li>Materiais de comunicação para sua organização.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section-card" style="text-align: center;">
+      <div class="d-flex flex-column gap-4 align-items-center justify-content-center">
+        <div style="max-width: 500px;">
+          <h2>Pronto para começar?</h2>
+          <p class="text-muted">Faça login, complete o perfil e publique o primeiro item em minutos. Sem taxas e com suporte humano para qualquer dúvida.</p>
+        </div>
+        <div class="d-flex gap-3 flex-wrap justify-content-center">
+          <a class="btn btn-primary" href="{% url 'usuario:login' %}">Entrar</a>
+          <a class="btn btn-outline-primary" href="{% url 'usuario:register' %}">Criar conta</a>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}
